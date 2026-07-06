@@ -1,6 +1,6 @@
 "use client";
 
-import { BaseSyntheticEvent, useState, useEffect } from "react";
+import { type BaseSyntheticEvent, useState, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
 import {
   Conversation,
@@ -16,7 +16,7 @@ import {
   PromptInput,
   PromptInputTextarea,
   PromptInputSubmit,
-  type PromptInputMessage
+  type PromptInputMessage,
 } from "@/components/ai-elements/prompt-input";
 
 const ChatUI = ({
@@ -40,7 +40,12 @@ const ChatUI = ({
     setInput(value);
   };
 
-  const handleSubmit = (message:PromptInputMessage, e:BaseSyntheticEvent) => {};
+  const handleSubmit = (message: PromptInputMessage, e: BaseSyntheticEvent) => {
+    if (message.text) {
+      sendMessage({ text: message.text });
+      setInput("");
+    }
+  };
 
   return (
     <>
@@ -50,9 +55,9 @@ const ChatUI = ({
             <ConversationEmptyState className="absolute top-1/2 -translate-y-1/2 -mx-8" />
           ) : (
             messages.map((message) => {
-              const { role, parts } = message;
+              const { id, role, parts } = message;
               return (
-                <Message from={role}>
+                <Message key={id} from={role}>
                   <MessageContent>
                     {parts.map((part) =>
                       part.type === "text" ? (
