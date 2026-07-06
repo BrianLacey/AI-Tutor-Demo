@@ -59,9 +59,11 @@ const ChatUI = ({
               return (
                 <Message key={id} from={role}>
                   <MessageContent>
-                    {parts.map((part) =>
+                    {parts.map((part, index) =>
                       part.type === "text" ? (
-                        <MessageResponse>{part.text}</MessageResponse>
+                        <MessageResponse key={index}>
+                          {part.text}
+                        </MessageResponse>
                       ) : null,
                     )}
                   </MessageContent>
