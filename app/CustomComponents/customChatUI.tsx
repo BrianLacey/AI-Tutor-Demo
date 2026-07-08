@@ -42,8 +42,12 @@ const ChatUI = ({
 
   const handleSubmit = (message: PromptInputMessage, e: BaseSyntheticEvent) => {
     if (message.text) {
-      sendMessage({ text: message.text });
-      setInput("");
+      try {
+        sendMessage({ text: message.text });
+        setInput("");
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 
