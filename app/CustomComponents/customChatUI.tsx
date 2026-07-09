@@ -40,10 +40,10 @@ const ChatUI = ({
     setInput(value);
   };
 
-  const handleSubmit = (message: PromptInputMessage, e: BaseSyntheticEvent) => {
+  const handleSubmit = async(message: PromptInputMessage, e: BaseSyntheticEvent) => {
     if (message.text) {
       try {
-        sendMessage({ text: message.text });
+        await sendMessage({ text: message.text });
         setInput("");
       } catch (err) {
         console.error(err);

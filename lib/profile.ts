@@ -1,10 +1,10 @@
-import { supabase } from "@/lib/server";
+import { supabaseAdminServer } from "@/lib/server";
 
 export const saveProfile = async (
   userId: string,
   newData: Record<string, unknown>,
 ) => {
-  const { data: existing } = await supabase
+  const { data: existing } = await supabaseAdminServer
     .from("user_profiles")
     .select("inferences")
     .eq("user_id", userId)
@@ -12,7 +12,7 @@ export const saveProfile = async (
 
   const updated = { ...(existing?.inferences ?? {}), ...newData };
 
-  const { error } = await supabase.from("user_profiles").upsert(
+  const { error } = await supabaseAdminServer.from("user_profiles").upsert(
     {
       user_id: userId,
       inferences: updated,
@@ -30,7 +30,7 @@ export const saveProfile = async (
 };
 
 export const getProfile = async (userId: string) => {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdminServer
     .from("user_profiles")
     .select("inferences")
     .eq("user_id", userId)

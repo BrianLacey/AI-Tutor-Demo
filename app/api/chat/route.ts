@@ -5,8 +5,20 @@ import {
   createUIMessageStreamResponse,
 } from "ai";
 import { createProfileTool } from "@/lib/customUtils";
+import { supabaseUserServer } from "@/lib/server";
 
 export const POST = async (req: Request) => {
+  const supabase = await supabaseUserServer();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+    });
+  }
+
   const readReq = await req.json();
   const { messages, id } = readReq;
   const result = streamText({
