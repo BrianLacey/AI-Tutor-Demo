@@ -9,7 +9,6 @@ import { createProfileTool } from "@/lib/customUtils";
 export const POST = async (req: Request) => {
   const readReq = await req.json();
   const { messages, id } = readReq;
-  console.log(readReq);
   const result = streamText({
     model: "google/gemini-2.5-flash",
     instructions:
