@@ -1,7 +1,7 @@
 "use client";
 
 import { CSSProperties, ReactNode } from "react";
-
+import Link from "next/link";
 import {
   SidebarProvider,
   Sidebar,
@@ -10,6 +10,7 @@ import {
   SidebarInset,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { signOut } from "../login/actions";
 
 const CustomSidebar = ({
   children,
@@ -28,8 +29,16 @@ const CustomSidebar = ({
       >
         <SidebarHeader className="text-center">AI Tutor Demo</SidebarHeader>
         <SidebarContent className="p-4">
-          <Button disabled={chatLoading}>Chat Thread</Button>
-          <Button disabled={chatLoading}>Profile Data</Button>
+          <Link href="/">
+            <Button disabled={chatLoading} className={"w-full"}>
+              Chat Thread
+            </Button>
+          </Link>
+          <Link href="/profile">
+            <Button disabled={chatLoading} className={"w-full"}>
+              Profile Data
+            </Button>
+          </Link>
           <Button
             onClick={() => {
               setChatLoading((prevState: any) => !prevState);
@@ -37,6 +46,7 @@ const CustomSidebar = ({
           >
             Test Loading State
           </Button>
+          <Button onClick={signOut}>Sign Out</Button>
         </SidebarContent>
       </Sidebar>
       <SidebarInset className="bg-slate-600 text-white">
