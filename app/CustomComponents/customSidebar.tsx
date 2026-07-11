@@ -1,3 +1,5 @@
+"use client";
+
 import { CSSProperties, ReactNode } from "react";
 
 import {
@@ -12,7 +14,7 @@ import { Button } from "@/components/ui/button";
 const CustomSidebar = ({
   children,
   chatLoading = false,
-  setChatLoading = ()=>{},
+  setChatLoading = () => {},
 }: {
   children: ReactNode;
   chatLoading: boolean;
