@@ -10,7 +10,7 @@ import { fetchUser } from "./login/actions";
 import { GlobalContext } from "@/app/contexts";
 import { type IAlert } from "@/lib/types";
 
-const App = async () => {
+const App = () => {
   const initialAlert = {
     icon: null,
     title: "",
