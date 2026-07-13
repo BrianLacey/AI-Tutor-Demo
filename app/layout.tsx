@@ -38,7 +38,7 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="bg-slate-600 min-h-full flex flex-col">
         <PagesWrapper>{children}</PagesWrapper>
       </body>
     </html>

@@ -1,6 +1,9 @@
 "use client";
 
-import { type BaseSyntheticEvent, useState, useEffect } from "react";
+import {
+  type BaseSyntheticEvent,
+  useState,
+} from "react";
 import { useChat } from "@ai-sdk/react";
 import {
   Conversation,
@@ -19,28 +22,20 @@ import {
   type PromptInputMessage,
 } from "@/components/ai-elements/prompt-input";
 
-const ChatUI = ({
-  chatLoading = false,
-  setChatLoading = () => {},
-}: {
-  chatLoading: boolean;
-  setChatLoading: any;
-}) => {
+const ChatUI = () => {
   const [input, setInput] = useState("");
   const { messages, sendMessage, status } = useChat();
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setChatLoading(false);
-  //   }, 4000);
-  // }, []);
 
   const handlePromptChange = (e: BaseSyntheticEvent) => {
     const { value } = e.target;
     setInput(value);
   };
 
-  const handleSubmit = async(message: PromptInputMessage, e: BaseSyntheticEvent) => {
+  const handleSubmit = async (
+    message: PromptInputMessage,
+    e: BaseSyntheticEvent,
+  ) => {
     if (message.text) {
       try {
         await sendMessage({ text: message.text });
@@ -82,9 +77,9 @@ const ChatUI = ({
         <PromptInputTextarea
           value={input}
           onChange={handlePromptChange}
-          disabled={chatLoading}
+          // disabled={chatLoading}
         />
-        <PromptInputSubmit disabled={chatLoading} className="mr-4" />
+        <PromptInputSubmit /* disabled={chatLoading} */ className="mr-4" />
       </PromptInput>
     </>
   );
