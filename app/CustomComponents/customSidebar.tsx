@@ -59,7 +59,7 @@ const CustomSidebar = ({
           <Button onClick={handleSignOut}>Sign Out</Button>
         </SidebarContent>
       </Sidebar>
-      <SidebarInset className="bg-slate-600 text-white">
+      <SidebarInset className="bg-slate-600 text-white h-full">
         {children}
       </SidebarInset>
     </SidebarProvider>
