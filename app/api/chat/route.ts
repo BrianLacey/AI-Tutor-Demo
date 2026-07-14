@@ -7,6 +7,7 @@ import {
 import { saveProfileTool } from "@/lib/customUtils";
 import { supabaseUserServer } from "@/lib/server";
 import { getProfile } from "@/lib/profile";
+import { profileBuildInstructions } from "@/app/helpers";
 
 export const POST = async (req: Request) => {
   const supabase = await supabaseUserServer();
@@ -20,12 +21,14 @@ export const POST = async (req: Request) => {
     });
   }
 
+  const profile = await getProfile(user.id);
+
   const readReq = await req.json();
   const { messages } = readReq;
   const result = streamText({
     model: "google/gemini-2.5-flash",
     instructions:
-      "You are a tutor helping a student prepare for the AP Biology exam. Whenever the student reveals something worth remembering — their name, communication preferences, test date, strengths/weaknesses, practice preferences, or how they're feeling about the exam — call the saveProfileInfo tool with just the new information. Don't call it for trivial or already-known details. Always continue with a normal conversational reply after any tool call.",
+      profileBuildInstructions(profile),
     messages: await convertToModelMessages(messages),
     tools: {
       saveProfileInfo: saveProfileTool(user.id),

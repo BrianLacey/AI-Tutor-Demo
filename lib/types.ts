@@ -21,4 +21,6 @@ export interface IGlobalContext {
   setAlert: Dispatch<SetStateAction<IAlert>>;
   pageLoading: boolean;
   setPageLoading: Dispatch<SetStateAction<boolean>>;
+  profile: any;
+  fetchProfile: () => Promise<void>
 }

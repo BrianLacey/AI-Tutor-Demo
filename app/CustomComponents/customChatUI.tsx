@@ -3,6 +3,7 @@
 import {
   type BaseSyntheticEvent,
   useState,
+  useContext
 } from "react";
 import { useChat } from "@ai-sdk/react";
 import {
@@ -21,10 +22,13 @@ import {
   PromptInputSubmit,
   type PromptInputMessage,
 } from "@/components/ai-elements/prompt-input";
+import { GlobalContext } from "../contexts";
 
 const ChatUI = () => {
   const [input, setInput] = useState("");
   const { messages, sendMessage, status } = useChat();
+  // @ts-ignore
+  const { fetchProfile } = useContext(GlobalContext);
 
 
   const handlePromptChange = (e: BaseSyntheticEvent) => {
@@ -39,6 +43,7 @@ const ChatUI = () => {
     if (message.text) {
       try {
         await sendMessage({ text: message.text });
+        await fetchProfile();
         setInput("");
       } catch (err) {
         console.error(err);
@@ -77,7 +82,7 @@ const ChatUI = () => {
         <PromptInputTextarea
           value={input}
           onChange={handlePromptChange}
-          // disabled={chatLoading}
+        // disabled={chatLoading}
         />
         <PromptInputSubmit /* disabled={chatLoading} */ className="mr-4" />
       </PromptInput>

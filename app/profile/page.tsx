@@ -1,25 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { readProfile } from "../services/services";
 import { camelToEnglish } from "../helpers";
+import { GlobalContext } from "../contexts";
 
 const Profile = () => {
-  const [profile, setProfile] = useState<any>();
 
-  const fetchProfile = async () => {
-    try {
-      const { inferences } = await readProfile();
-      console.log(inferences);
-      setProfile(inferences);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchProfile();
-  }, []);
+  // @ts-ignore
+  const { profile } = useContext(GlobalContext);
 
   return (
     <div className="p-8">

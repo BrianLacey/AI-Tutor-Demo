@@ -7,6 +7,7 @@ import { Spinner } from "@/components/ui/spinner";
 import CustomSidebar from "./CustomComponents/customSidebar";
 import { GlobalContext } from "@/app/contexts";
 import { type IAlert } from "@/lib/types";
+import { readProfile } from "./services/services";
 
 const PagesWrapper = ({
   children,
@@ -27,6 +28,17 @@ const PagesWrapper = ({
   const [chatLoading, setChatLoading] = useState(false);
   const [alert, setAlert] = useState<IAlert>(initialAlert);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<any>(null)
+
+  const fetchProfile = async () => {
+      try {
+        const profile = await readProfile();
+        console.log(profile);
+        setProfile(profile);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
   useEffect(() => {
     if (!currentUser && pathName !== "/login") router.push("/login");
@@ -40,6 +52,10 @@ const PagesWrapper = ({
     if (!currentUser && pathName === "/login") setPageLoading(false);
   }, [currentUser, pathName]);
 
+    useEffect(() => {
+    fetchProfile();
+  }, []);
+
   return (
     <GlobalContext
       value={{
@@ -49,6 +65,8 @@ const PagesWrapper = ({
         setAlert,
         pageLoading,
         setPageLoading,
+        profile,
+        fetchProfile
       }}
     >
       <div className="flex-1 flex flex-col h-full">
