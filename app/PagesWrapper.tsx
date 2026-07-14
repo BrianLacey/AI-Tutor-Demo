@@ -28,33 +28,26 @@ const PagesWrapper = ({
   const [chatLoading, setChatLoading] = useState(false);
   const [alert, setAlert] = useState<IAlert>(initialAlert);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<any>(null)
+  const [profile, setProfile] = useState<any>(null);
 
   const fetchProfile = async () => {
-      try {
-        const profile = await readProfile();
-        console.log(profile);
-        setProfile(profile);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    try {
+      const { inferences } = await readProfile();
+      console.log(inferences);
+      setProfile(inferences);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    if (!currentUser && pathName !== "/login") router.push("/login");
+    if (!currentUser && pathName !== "/login") {
+      router.push("/login");
+      return;
+    }
+    setPageLoading(false);
+    if (currentUser && pathName !== "/login") fetchProfile();
   }, [currentUser, pathName]);
-
-  useEffect(() => {
-    if (currentUser && pathName !== "/login") setPageLoading(false);
-  }, [currentUser, pathName]);
-
-  useEffect(() => {
-    if (!currentUser && pathName === "/login") setPageLoading(false);
-  }, [currentUser, pathName]);
-
-    useEffect(() => {
-    fetchProfile();
-  }, []);
 
   return (
     <GlobalContext
@@ -66,7 +59,7 @@ const PagesWrapper = ({
         pageLoading,
         setPageLoading,
         profile,
-        fetchProfile
+        fetchProfile,
       }}
     >
       <div className="flex-1 flex flex-col h-full">

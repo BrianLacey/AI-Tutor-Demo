@@ -10,7 +10,20 @@ export const saveProfile = async (
     .eq("user_id", userId)
     .maybeSingle();
 
-  const updated = { ...(existing?.inferences ?? {}), ...newData };
+  const existingInferences = existing?.inferences ?? {};
+  let merged = existingInferences.unitMastery ?? [];
+  if (Array.isArray(newData.unitMastery)) {
+    const newEntries: { unit: string; level: string }[] = newData.unitMastery;
+    const newUnits = new Set(newEntries.map((entry) => entry.unit));
+    merged = [
+      ...merged.filter(
+        (entry: { unit: string; level: string }) => !newUnits.has(entry.unit),
+      ),
+      ...newEntries,
+    ];
+  }
+
+  const updated = { ...existingInferences, ...newData, unitMastery: merged };
 
   const { error } = await supabaseAdminServer.from("user_profiles").upsert(
     {

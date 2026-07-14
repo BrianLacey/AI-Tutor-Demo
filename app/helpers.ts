@@ -4,7 +4,7 @@ export const camelToEnglish = (property: string) =>
     .replace(/^./, (m) => m.toUpperCase())
     .trim();
 
-export const profileBuildInstructions = (profile) => {
+export const profileBuildInstructions = (profile: any) => {
   const baseInstructions =
     "You are a tutor helping a student prepare for the AP Biology exam. Whenever the student reveals something worth remembering — their name, communication preferences, test date, strengths/weaknesses, practice preferences, or how they're feeling about the exam — call the saveProfileInfo tool with just the new information. Don't call it for trivial or already-known details. Always continue with a normal conversational reply after any tool call.";
 
@@ -27,10 +27,10 @@ export const profileBuildInstructions = (profile) => {
         : `The exam date has passed or is today — focus on final review.`,
     );
   }
-  if (profile.unitMastery) {
-    const weakUnits = Object.entries(profile.unitMastery)
-      .filter(([, level]) => level === "weak")
-      .map(([unit]) => unit.replace(/_/g, " "));
+  if (profile.unitMastery?.length) {
+    const weakUnits = profile.unitMastery
+      .filter((unit: any) => unit.level === "weak")
+      .map((unit: any) => unit.unit.replace(/_/g, " "));
     if (weakUnits.length > 0) {
       additionalInstructions.push(
         `Prioritize review of these weak units: ${weakUnits.join(", ")}.`,
@@ -69,7 +69,7 @@ export const profileBuildInstructions = (profile) => {
   }
 
   if (profile.practiceStylePreference) {
-    const styleMap = {
+    const styleMap: any = {
       flashcard_recall: "quick recall-style drills",
       worked_frq_walkthrough: "worked FRQ walkthroughs with full explanations",
       cold_quizzing: "being quizzed cold with feedback after",

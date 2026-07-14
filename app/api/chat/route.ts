@@ -3,6 +3,7 @@ import {
   convertToModelMessages,
   toUIMessageStream,
   createUIMessageStreamResponse,
+  stepCountIs,
 } from "ai";
 import { saveProfileTool } from "@/lib/customUtils";
 import { supabaseUserServer } from "@/lib/server";
@@ -27,12 +28,12 @@ export const POST = async (req: Request) => {
   const { messages } = readReq;
   const result = streamText({
     model: "google/gemini-2.5-flash",
-    instructions:
-      profileBuildInstructions(profile),
+    instructions: profileBuildInstructions(profile),
     messages: await convertToModelMessages(messages),
     tools: {
       saveProfileInfo: saveProfileTool(user.id),
     },
+    stopWhen: stepCountIs(3),
   });
   return createUIMessageStreamResponse({
     stream: toUIMessageStream({ stream: result.stream }),

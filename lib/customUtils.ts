@@ -8,21 +8,23 @@ const profileSchema = z.object({
     .enum(["concise", "detailed", "casual", "formal"])
     .optional(),
   unitMastery: z
-    .record(
-      z.enum([
-        "chemistry_of_life",
-        "cell_structure",
-        "cellular_energetics",
-        "cell_communication_cycle",
-        "heredity",
-        "gene_expression",
-        "natural_selection",
-        "ecology",
-      ]),
-      z.enum(["weak", "developing", "solid"]),
+    .array(
+      z.object({
+        unit: z.enum([
+          "chemistryOfLife",
+          "cellStructure",
+          "cellularEnergetics",
+          "cellCommunicationCycle",
+          "heredity",
+          "geneExpression",
+          "naturalSelection",
+          "ecology",
+        ]),
+        level: z.enum(["weak", "developing", "solid"]),
+      }),
     )
     .optional(),
-  recurringErrorPatterns: z.array(z.string()),
+  recurringErrorPatterns: z.array(z.string()).optional(),
   strongerFormat: z.enum(["multiple_choice", "frq", "balanced"]).optional(),
   examDate: z.string().optional(),
   weeklyStudyTimeMinutes: z.number().optional(),
