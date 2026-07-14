@@ -22,5 +22,6 @@ export interface IGlobalContext {
   pageLoading: boolean;
   setPageLoading: Dispatch<SetStateAction<boolean>>;
   profile: any;
-  fetchProfile: () => Promise<void>
+  fetchProfile: () => Promise<void>;
+  pathName: string;
 }

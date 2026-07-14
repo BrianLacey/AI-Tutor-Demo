@@ -33,7 +33,6 @@ const PagesWrapper = ({
   const fetchProfile = async () => {
     try {
       const { inferences } = await readProfile();
-      console.log(inferences);
       setProfile(inferences);
     } catch (error) {
       console.error(error);
@@ -60,6 +59,7 @@ const PagesWrapper = ({
         setPageLoading,
         profile,
         fetchProfile,
+        pathName
       }}
     >
       <div className="flex-1 flex flex-col h-full">
