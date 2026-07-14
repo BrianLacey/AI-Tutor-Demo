@@ -1,36 +1,65 @@
 "use client";
 
-import { useState, type BaseSyntheticEvent } from "react";
+import {
+  useState,
+  useContext,
+  type BaseSyntheticEvent,
+} from "react";
+import { useRouter } from "next/navigation";
 import { signUp, signIn } from "./actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Field,
-  FieldDescription,
-  FieldGroup,
   FieldLabel,
   FieldSet,
 } from "@/components/ui/field";
+import { GlobalContext } from "../contexts";
 
 const LoginPage = () => {
   const [login, setLogin] = useState({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  // @ts-ignore
+  const { setCurrentUser, pageLoading, setPageLoading } =
+    useContext(GlobalContext);
 
   const handleChange = (e: BaseSyntheticEvent) => {
     const { name, value } = e.target;
     setLogin((prevData) => ({ ...prevData, [name]: value }));
   };
-  const handleSignIn = () => {
-    signIn(login);
+  const handleSignIn = async () => {
+    setLoading(true);
+    try {
+      const user = await signIn(login);
+      setPageLoading(true);
+      setCurrentUser(user);
+      router.push("/");
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
   };
-  const handleSignUp = () => {
-    signUp(login);
+  const handleSignUp = async () => {
+    setLoading(true);
+    try {
+      const user = await signUp(login);
+      setPageLoading(true);
+      setCurrentUser(user);
+      router.push("/");
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="bg-slate-600 min-h-screen">
+    <div className="relative flex-1 h-full">
       <FieldSet className="w-96 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <Field>
           <FieldLabel>Email</FieldLabel>
@@ -54,10 +83,10 @@ const LoginPage = () => {
           />
         </Field>
         <Field orientation="horizontal">
-          <Button type="button" onClick={handleSignIn}>
+          <Button type="button" onClick={handleSignIn} disabled={loading}>
             Sign In
           </Button>
-          <Button type="button" onClick={handleSignUp}>
+          <Button type="button" onClick={handleSignUp} disabled={loading}>
             Sign Up
           </Button>
         </Field>

@@ -15,7 +15,12 @@ export interface IAlert {
 }
 
 export interface IGlobalContext {
-  currentUser: User | undefined;
+  currentUser: User | null;
+  setCurrentUser: Dispatch<SetStateAction<User | null>>;
   alert: IAlert;
   setAlert: Dispatch<SetStateAction<IAlert>>;
+  pageLoading: boolean;
+  setPageLoading: Dispatch<SetStateAction<boolean>>;
+  profile: any;
+  fetchProfile: () => Promise<void>
 }

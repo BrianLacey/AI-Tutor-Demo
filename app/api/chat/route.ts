@@ -3,9 +3,12 @@ import {
   convertToModelMessages,
   toUIMessageStream,
   createUIMessageStreamResponse,
+  stepCountIs,
 } from "ai";
-import { createProfileTool } from "@/lib/customUtils";
+import { saveProfileTool } from "@/lib/customUtils";
 import { supabaseUserServer } from "@/lib/server";
+import { getProfile } from "@/lib/profile";
+import { profileBuildInstructions } from "@/app/helpers";
 
 export const POST = async (req: Request) => {
   const supabase = await supabaseUserServer();
@@ -19,18 +22,39 @@ export const POST = async (req: Request) => {
     });
   }
 
+  const profile = await getProfile(user.id);
+
   const readReq = await req.json();
-  const { messages, id } = readReq;
+  const { messages } = readReq;
   const result = streamText({
     model: "google/gemini-2.5-flash",
-    instructions:
-      "Whenever the user reveals something worth remembering about themselves — their name, communication preferences, interests, or goals — call the saveProfileInfo tool with just the new information. Don't call it for trivial or already-known details. Always continue with a normal conversational reply after any tool call.",
+    instructions: profileBuildInstructions(profile),
     messages: await convertToModelMessages(messages),
     tools: {
-      saveProfileInfo: createProfileTool(id),
+      saveProfileInfo: saveProfileTool(user.id),
     },
+    stopWhen: stepCountIs(3),
   });
   return createUIMessageStreamResponse({
     stream: toUIMessageStream({ stream: result.stream }),
+  });
+};
+
+export const GET = async (req: Request) => {
+  const supabase = await supabaseUserServer();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+    });
+  }
+
+  const inferences = await getProfile(user.id);
+  return new Response(JSON.stringify({ inferences }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
   });
 };
