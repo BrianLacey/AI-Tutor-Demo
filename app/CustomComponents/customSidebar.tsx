@@ -13,15 +13,7 @@ import { Button } from "@/components/ui/button";
 import { signOut } from "../login/actions";
 import { GlobalContext } from "../contexts";
 
-const CustomSidebar = ({
-  children,
-  chatLoading = false,
-  setChatLoading = () => {},
-}: {
-  children: ReactNode;
-  chatLoading: boolean;
-  setChatLoading: any;
-}) => {
+const CustomSidebar = ({ children }: { children: ReactNode }) => {
   //@ts-ignore
   const { setCurrentUser, setPageLoading } = useContext(GlobalContext);
 
@@ -40,14 +32,10 @@ const CustomSidebar = ({
         <SidebarHeader className="text-center">AI Tutor Demo</SidebarHeader>
         <SidebarContent className="p-4">
           <Link href="/">
-            <Button disabled={chatLoading} className={"w-full"}>
-              Chat Thread
-            </Button>
+            <Button className={"w-full"}>Chat Thread</Button>
           </Link>
           <Link href="/profile">
-            <Button disabled={chatLoading} className={"w-full"}>
-              Profile Data
-            </Button>
+            <Button className={"w-full"}>Profile Data</Button>
           </Link>
           <Button onClick={handleSignOut}>Sign Out</Button>
         </SidebarContent>
