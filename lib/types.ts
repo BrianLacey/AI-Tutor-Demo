@@ -7,18 +7,17 @@ export type TLogin = {
 };
 
 export interface IAlert {
-  icon: ReactNode | null;
+  type: string;
   title: string;
   description: string;
-  styling: string;
   isOpen: boolean;
 }
 
 export interface IGlobalContext {
   currentUser: User | null;
   setCurrentUser: Dispatch<SetStateAction<User | null>>;
-  alert: IAlert;
-  setAlert: Dispatch<SetStateAction<IAlert>>;
+  alertProps: IAlert;
+  setAlertProps: Dispatch<SetStateAction<IAlert>>;
   pageLoading: boolean;
   setPageLoading: Dispatch<SetStateAction<boolean>>;
   profile: any;

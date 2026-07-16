@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { type User } from "@supabase/auth-js";
 import { Spinner } from "@/components/ui/spinner";
 import CustomSidebar from "./CustomComponents/customSidebar";
+import CustomAlert from "./CustomComponents/customAlert";
 import { GlobalContext } from "@/app/contexts";
 import { type IAlert } from "@/lib/types";
 import { readProfile } from "./services/services";
@@ -15,10 +16,9 @@ const PagesWrapper = ({
   children: ReactNode;
 }>) => {
   const initialAlert = {
-    icon: null,
+    type: "",
     title: "",
     description: "",
-    styling: "",
     isOpen: false,
   };
   const pathName = usePathname();
@@ -26,7 +26,7 @@ const PagesWrapper = ({
 
   const [pageLoading, setPageLoading] = useState(true);
   const [chatLoading, setChatLoading] = useState(false);
-  const [alert, setAlert] = useState<IAlert>(initialAlert);
+  const [alertProps, setAlertProps] = useState<IAlert>(initialAlert);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<any>(null);
 
@@ -35,7 +35,13 @@ const PagesWrapper = ({
       const { inferences } = await readProfile();
       setProfile(inferences);
     } catch (error) {
-      console.error(error);
+      setAlertProps({
+        type: "error",
+        title: "Error",
+        description:
+          "Something went wrong getting your profile. Please try again later.",
+        isOpen: true,
+      });
     }
   };
 
@@ -53,16 +59,17 @@ const PagesWrapper = ({
       value={{
         currentUser,
         setCurrentUser,
-        alert,
-        setAlert,
+        alertProps,
+        setAlertProps,
         pageLoading,
         setPageLoading,
         profile,
         fetchProfile,
-        pathName
+        pathName,
       }}
     >
       <div className="flex-1 flex flex-col h-full">
+        <CustomAlert />
         {pageLoading ? (
           <Spinner className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white size-20" />
         ) : currentUser && pathName !== "/login" ? (

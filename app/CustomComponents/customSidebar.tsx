@@ -49,13 +49,6 @@ const CustomSidebar = ({
               Profile Data
             </Button>
           </Link>
-          {/* <Button
-            onClick={() => {
-              setChatLoading((prevState: any) => !prevState);
-            }}
-          >
-            Test Loading State
-          </Button> */}
           <Button onClick={handleSignOut}>Sign Out</Button>
         </SidebarContent>
       </Sidebar>

@@ -31,7 +31,8 @@ const ChatUI = () => {
   const [input, setInput] = useState("");
   const { messages, setMessages, sendMessage, status } = useChat();
   // @ts-ignore
-  const { currentUser, pathName, fetchProfile } = useContext(GlobalContext);
+  const { currentUser, pathName, fetchProfile, setAlertProps } =
+    useContext(GlobalContext);
 
   const fetchChat = async () => {
     const chatHistory = await readChat();
@@ -56,8 +57,15 @@ const ChatUI = () => {
         await sendMessage({ text: message.text });
         await fetchProfile();
         setInput("");
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
+        setAlertProps({
+          type: "error",
+          title: "Error",
+          description:
+            "Something went wrong. Please try again later.",
+          isOpen: true,
+        });
       }
     }
   };

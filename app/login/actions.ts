@@ -9,10 +9,9 @@ export const signUp = async (formData: TLogin) => {
 
   const { error, data } = await supabase.auth.signUp({ email, password });
   if (error) {
-    console.error(
-      "There was an error signing up. Please check tyour credentials an try again.",
+    throw new Error(
+      "There was an error signing up. Please check your credentials and try again.",
     );
-    throw new Error(error.message);
   }
   return data.user;
 };
@@ -26,10 +25,9 @@ export const signIn = async (formData: TLogin) => {
     password,
   });
   if (error) {
-    console.error(
-      "There was an error signing in. Please check tyour credentials an try again.",
+    throw new Error(
+      "There was an error signing in. Please check your credentials and try again.",
     );
-    throw new Error(error.message);
   }
   return data.user;
 };
@@ -43,7 +41,14 @@ export const fetchUser = async () => {
   const supabase = await supabaseUserServer();
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser();
+
+  if (error) {
+    throw new Error(
+      "There was an error gathering your data. Please try again.",
+    );
+  }
   if (user) {
     return user;
   } else {
