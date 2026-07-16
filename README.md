@@ -33,9 +33,9 @@ Run the command:
 At the root of the project folder create a new file titled .env.local. Here's where API keys will live.
 
 6. Create API keys  
-Create an account at [supabase.com](https://supabase.com/). Navigate to the Dashboard and create a new project. Once that's done, click connect to find the supabase public API keys. Copy both NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY into your .env.local file. Next, navigate to settings -> API Keys to find your secret key. Copy this into your .env.local as well under the name SUPABASE_SERVICE_ROLE_KEY.
+Create an account at [supabase.com](https://supabase.com/). Navigate to the Dashboard and create a new project. Once that's done, click connect to find the supabase public API keys. Copy both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` into your .env.local file. Next, navigate to settings -> API Keys to find your secret key. Copy this into your .env.local as well under the name `SUPABASE_SERVICE_ROLE_KEY`.
 
-    Next create an account at [vercel.com](https://vercel.com/). Navigate to AI Gateway -> API Keys. Create API Key here (Be sure to save it somewhere safe; Once the dialog box is closed, you won't be able to view it again.) and copy this key into your .env.local file under the name AI_GATEWAY_API_KEY.
+    Next create an account at [vercel.com](https://vercel.com/). Navigate to AI Gateway -> API Keys. Create API Key here (Be sure to save it somewhere safe; Once the dialog box is closed, you won't be able to view it again.) and copy this key into your .env.local file under the name `AI_GATEWAY_API_KEY`.
 
 7. Create tables for users and chat history  
 In Supabase, navigate to your project and open the SQL Editor. Enter the following query to create the User Profiles table then click Run:
