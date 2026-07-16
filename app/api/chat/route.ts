@@ -32,7 +32,11 @@ export const POST = async (req: Request) => {
       (message.role = "user"),
   );
 
-  await saveMessage(user.id, lastUserMessage.role, lastUserMessage.parts);
+  try {
+    await saveMessage(user.id, lastUserMessage.role, lastUserMessage.parts);
+  } catch (error) {
+    console.error("Failed to save usermessage", error);
+  }
 
   const result = streamText({
     model: "google/gemini-2.5-flash",
@@ -47,7 +51,11 @@ export const POST = async (req: Request) => {
     stream: toUIMessageStream({
       stream: result.stream,
       onFinish: async ({ responseMessage }) => {
-        await saveMessage(user.id, "assistant", responseMessage.parts);
+        try {
+          await saveMessage(user.id, "assistant", responseMessage.parts);
+        } catch (error) {
+          console.error("Failed to assistant usermessage", error);
+        }
       },
     }),
   });

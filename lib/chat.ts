@@ -23,9 +23,8 @@ export const getChat = async (userId: string) => {
     .order("created_at", { ascending: true });
 
   if (error) {
-    return new Response(JSON.stringify({ error: "Failed to load history" }), {
-      status: 500,
-    });
+    console.error("Failed to load history", error);
+    throw new Error(error.message);
   }
 
   return { messages: data };

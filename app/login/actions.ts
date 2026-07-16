@@ -9,11 +9,13 @@ export const signUp = async (formData: TLogin) => {
 
   const { error, data } = await supabase.auth.signUp({ email, password });
   if (error) {
-    throw new Error(
-      "There was an error signing up. Please check your credentials and try again.",
-    );
+    return {
+      ok: false,
+      message:
+        "There was an error signing up. Please check your credentials and try again.",
+    };
   }
-  return data.user;
+  return { ok: true, user: data.user };
 };
 
 export const signIn = async (formData: TLogin) => {
@@ -25,11 +27,13 @@ export const signIn = async (formData: TLogin) => {
     password,
   });
   if (error) {
-    throw new Error(
-      "There was an error signing in. Please check your credentials and try again.",
-    );
+    return {
+      ok: false,
+      message:
+        "There was an error signing in. Please check your credentials and try again.",
+    };
   }
-  return data.user;
+  return { ok: true, user: data.user };
 };
 
 export const signOut = async () => {
@@ -45,13 +49,14 @@ export const fetchUser = async () => {
   } = await supabase.auth.getUser();
 
   if (error) {
-    throw new Error(
-      "There was an error gathering your data. Please try again.",
-    );
+    return {
+      ok: false,
+      message: "There was an error gathering your data. Please try again.",
+    };
   }
   if (user) {
-    return user;
+    return { ok: true, user: user };
   } else {
-    return null;
+    return { ok: true, user: null };
   }
 };

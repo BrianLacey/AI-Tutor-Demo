@@ -27,11 +27,16 @@ const LoginPage = () => {
   const handleSignIn = async () => {
     setLoading(true);
     try {
-      const user = await signIn(login);
-      setPageLoading(true);
-      setCurrentUser(user);
-      router.push("/");
-      setLoading(false);
+      const result = await signIn(login);
+      if (result.ok) {
+        const { user } = result;
+        setPageLoading(true);
+        setCurrentUser(user);
+        router.push("/");
+        setLoading(false);
+      } else {
+        throw new Error(result.message);
+      }
     } catch (error) {
       console.error(error);
       setAlertProps({
@@ -46,11 +51,16 @@ const LoginPage = () => {
   const handleSignUp = async () => {
     setLoading(true);
     try {
-      const user = await signUp(login);
-      setPageLoading(true);
-      setCurrentUser(user);
-      router.push("/");
-      setLoading(false);
+      const result = await signUp(login);
+      if (result.ok) {
+        const { user } = result;
+        setPageLoading(true);
+        setCurrentUser(user);
+        router.push("/");
+        setLoading(false);
+      } else {
+        throw new Error(result.message);
+      }
     } catch (error) {
       console.error(error);
       setAlertProps({
