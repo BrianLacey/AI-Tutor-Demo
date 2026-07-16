@@ -1,6 +1,5 @@
-DEPLOYED APP
-
-Please find the deployed version of the app here: [https://ai-tutor-demo-jade.vercel.app/](https://ai-tutor-demo-jade.vercel.app/)
+DEPLOYED APP  
+    Please find the deployed version of the app here: [https://ai-tutor-demo-jade.vercel.app/](https://ai-tutor-demo-jade.vercel.app/)
 
 SETUP INSTRUCTIONS
 
