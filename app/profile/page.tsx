@@ -1,17 +1,15 @@
 "use client";
 
-import { useState, useEffect, useContext } from "react";
-import { readProfile } from "../services/services";
+import { useContext } from "react";
 import { camelToEnglish } from "../helpers";
 import { GlobalContext } from "../contexts";
 
 const Profile = () => {
-
   // @ts-ignore
   const { profile } = useContext(GlobalContext);
 
   return (
-    <div className="p-8">
+    <div className="p-8 h-screen">
       <h2 className="text-2xl">About You:</h2>
       {!profile || Object.keys(profile).length < 1 ? (
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
