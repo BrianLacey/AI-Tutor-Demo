@@ -24,11 +24,14 @@ import {
   PromptInputSubmit,
   type PromptInputMessage,
 } from "@/components/ai-elements/prompt-input";
+import { Shimmer } from "@/components/ai-elements/shimmer";
+import { Spinner } from "@/components/ui/spinner";
 import { GlobalContext } from "../contexts";
 import { readChat } from "../services/services";
 
 const ChatUI = () => {
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(true);
   const { messages, setMessages, sendMessage, status } = useChat();
   // @ts-ignore
   const { currentUser, pathName, fetchProfile, setAlertProps } =
@@ -36,7 +39,10 @@ const ChatUI = () => {
 
   const fetchChat = async () => {
     const chatHistory = await readChat();
-    setMessages(chatHistory.messages);
+    if (chatHistory?.messages.length > 0) {
+      setMessages(chatHistory.messages);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -62,8 +68,7 @@ const ChatUI = () => {
         setAlertProps({
           type: "error",
           title: "Error",
-          description:
-            "Something went wrong. Please try again later.",
+          description: "Something went wrong. Please try again later.",
           isOpen: true,
         });
       }
@@ -72,43 +77,61 @@ const ChatUI = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <Conversation className="flex-1">
-        <ConversationContent>
-          {messages.length < 1 ? (
-            <ConversationEmptyState className="absolute top-1/2 -translate-y-1/2 -mx-8" />
-          ) : (
-            messages.map((message, index) => {
-              const { id, role, parts } = message;
-              return (
-                <Message key={id ?? index} from={role}>
-                  <MessageContent>
-                    {parts.map((part, index) =>
-                      part.type === "text" ? (
-                        <MessageResponse
-                          key={index}
-                          className={`${role === "assistant" ? "text-white" : ""}`}
-                        >
-                          {part.text}
-                        </MessageResponse>
-                      ) : null,
-                    )}
-                  </MessageContent>
-                </Message>
-              );
-            })
-          )}
-        </ConversationContent>
-        <ConversationScrollButton className="text-black" />
-      </Conversation>
+      {loading ? (
+        <Spinner className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white size-20" />
+      ) : (
+        <>
+          <Conversation className="flex-1">
+            <ConversationContent>
+              {messages.length < 1 ? (
+                <ConversationEmptyState className="absolute top-1/2 -translate-y-1/2 -mx-8" />
+              ) : (
+                <>
+                  {messages.map((message, index) => {
+                    const { id, role, parts } = message;
+                    return (
+                      <Message key={id ?? index} from={role}>
+                        <MessageContent>
+                          {parts.map((part, index) =>
+                            part.type === "text" ? (
+                              <MessageResponse
+                                key={index}
+                                className={`${role === "assistant" ? "text-white" : ""}`}
+                              >
+                                {part.text}
+                              </MessageResponse>
+                            ) : null,
+                          )}
+                        </MessageContent>
+                      </Message>
+                    );
+                  })}
+                  {["submitted", "streaming"].includes(status) && (
+                    <Message from="assistant">
+                      <MessageContent>
+                          <Shimmer>Generating response...</Shimmer>
+                      </MessageContent>
+                    </Message>
+                  )}
+                </>
+              )}
+            </ConversationContent>
+            <ConversationScrollButton className="text-black" />
+          </Conversation>
 
-      <PromptInput onSubmit={handleSubmit} className="p-4">
-        <PromptInputTextarea
-          value={input}
-          onChange={handlePromptChange}
-          // disabled={chatLoading}
-        />
-        <PromptInputSubmit /* disabled={chatLoading} */ className="mr-4" />
-      </PromptInput>
+          <PromptInput onSubmit={handleSubmit} className="p-4">
+            <PromptInputTextarea
+              value={input}
+              onChange={handlePromptChange}
+              disabled={["submitted", "streaming"].includes(status)}
+            />
+            <PromptInputSubmit
+              disabled={["submitted", "streaming"].includes(status)}
+              className="mr-4"
+            />
+          </PromptInput>
+        </>
+      )}
     </div>
   );
 };

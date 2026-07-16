@@ -25,7 +25,6 @@ const PagesWrapper = ({
   const router = useRouter();
 
   const [pageLoading, setPageLoading] = useState(true);
-  const [chatLoading, setChatLoading] = useState(false);
   const [alertProps, setAlertProps] = useState<IAlert>(initialAlert);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<any>(null);
@@ -73,12 +72,7 @@ const PagesWrapper = ({
         {pageLoading ? (
           <Spinner className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white size-20" />
         ) : currentUser && pathName !== "/login" ? (
-          <CustomSidebar
-            chatLoading={chatLoading}
-            setChatLoading={setChatLoading}
-          >
-            {children}
-          </CustomSidebar>
+          <CustomSidebar>{children}</CustomSidebar>
         ) : (
           children
         )}
